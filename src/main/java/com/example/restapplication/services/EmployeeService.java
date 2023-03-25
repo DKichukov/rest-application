@@ -1,5 +1,6 @@
 package com.example.restapplication.services;
 
+import com.example.restapplication.exceptions.EmployeeNotFoundException;
 import com.example.restapplication.models.Employee;
 import com.example.restapplication.repositories.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,9 @@ public class EmployeeService {
     }
 
     public Optional<Employee> readEmployee(Integer id) {
-        return employeeRepository.findById(id);
+        if (employeeRepository.findById(id).isPresent())
+            return employeeRepository.findById(id);
+        else throw new EmployeeNotFoundException();
     }
 
     public Optional<List<Employee>> readEmployeesByGender(String gender) {
@@ -54,7 +57,6 @@ public class EmployeeService {
         if (employeeRepository.findById(id).isPresent()) {
             employeeRepository.deleteById(id);
             return true;
-        }
-        return false;
+        }else throw new EmployeeNotFoundException();
     }
 }
